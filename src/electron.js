@@ -1,4 +1,8 @@
-const { app, BrowserWindow, ipcRenderer, remote } = require('electron')
+const { app, BrowserWindow, ipcRenderer, remote, ipcMain } = require('electron')
+var settings = require('user-settings').file('.myAppSettings');
+const fs = require('fs');
+const fsp = require('fs').promises;
+settings.set('username', 'rev087');
 
 function createWindow () {
     // Create the browser window.
@@ -10,7 +14,11 @@ function createWindow () {
         nodeIntegration: true,
         nativeWindowOpen: true
       }
+
+      
     })
+    win.setMenuBarVisibility(false)
+
 
     // and load the index.html of the app.
     //win.loadFile('index.html')
@@ -26,6 +34,7 @@ function createWindow () {
   // Some APIs can only be used after this event occurs.
   app.whenReady().then(createWindow)
 
+  
   //app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors');
   
   // Quit when all windows are closed, except on macOS. There, it's common
@@ -45,7 +54,27 @@ function createWindow () {
     }
   })
 
-  
-  
-  // In this file you can include the rest of your app's specific main process
-  // code. You can also put them in separate files and require them here.
+  var appData = process.env.APPDATA;
+  function getUid () {
+    const data = fs.readFileSync(appData + '/classroom-win10/user.json', 'utf8')
+    return data
+  }
+
+  ipcMain.on('getUid-message', (event, arg) => {
+    console.log(arg)
+    event.returnValue = getUid()
+  })
+
+  ipcMain.on('fileSave-message', (event, arg) => {
+    fs.writeFileSync(appData + '/classroom-win10/user.json', arg , 'utf-8'); 
+    event.reply('fileSave-reply', 'Saved')
+  })
+
+  /*
+  ipcMain.on('fileGet-message', (event, arg) => {
+    fsp.readFile(process.env.APPDATA + '/test.json', 'utf-8').then(data => {
+      console.log(data);
+      event.reply('fileGet-reply', data)
+  });  
+  })
+  */

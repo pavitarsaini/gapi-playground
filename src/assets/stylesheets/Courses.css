@@ -1,9 +1,73 @@
-.app {
-    background-color: #1e1e1e;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-  }
+@font-face { font-family: alata-regular; 
+  src: url('../fonts/Alata/Alata-Regular.ttf');
+} 
+
+@font-face { font-family: opensans-regular; 
+  src: url('../fonts/Open_Sans/OpenSans-Regular.ttf');
+} 
+
+a {
+  color: white;
+  white-space:nowrap; 
+  text-overflow:ellipsis;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.courses {
+  width: 91%;
+  height: 100%;
+  position: absolute; 
+  top: 17%; 
+  bottom: 0px; 
+  right: 0px;
+}
+
+.courses-container {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 233px 233px 233px 233px;
+  grid-template-rows: 233px 233px 233px 233px;
+  grid-row-gap: 6%;
+  grid-column-gap: 3%;
+}
+
+.course {
+  color: white;
+  background: #232323;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  border-radius: 10px;
+}  
+
+.course-header {
+  width: 100%;
+  height: 45%;
+  border-radius: 10px;
+  background: #3f3f3f;
+}
+
+.course-name {
+  font-weight: 500;
+  overflow: hidden;
+  width: 80%;
+  font-family: alata-regular;
+  font-size: 110%;
+  border-radius: 10px;
+  padding-top: 10px;
+  padding-left: 10px;
+  white-space:nowrap; 
+  text-overflow:ellipsis;
+}
+
+.course-section {
+  font-family: opensans-regular;
+  font-size: 90%;
+  padding-top: 10px;
+  padding-left: 10px;
+}

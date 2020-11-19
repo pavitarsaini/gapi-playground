@@ -1,4 +1,9 @@
+html, body { height: 100%; width: 100%; margin: 0; background-color: #1e1e1e; overflow: hidden;}
+
 .app {
+  height: 100%;
+  width: 100%;
+  position: relative;
   background-color: #1e1e1e;
   min-height: 100vh;
   display: flex;
@@ -7,6 +12,64 @@
   justify-content: center;
   color: white;
 }
+
+.logout {
+  padding: 1.5%;
+  float: right;
+  background: transparent;
+  border: none !important;
+}
+
+.photoURL {
+  float: right;
+  width: 4vw;
+  object-fit:cover;
+  border-radius:50%;
+}
+
+button:focus {
+  outline: 0;
+}
+
+.topbar {
+  justify-content: center;
+  z-index: 1;
+  float: right;
+  background: #262626;
+  height: 13vh;
+  width: 95vw;
+}
+
+.sidebar {
+  position: fixed;
+  background: #232323;
+  width: 5vw;
+  height: 100%;
+}
+
+.sidebar-button {
+  color: #ffffff;
+  border: none ;
+  border-right: #ffffff 2px solid !important;
+  width: 100%;
+  background: transparent;
+}
+.sidebar-button:hover {
+  background: #1e1e1e;
+}
+
+.sidebar-element {
+  color: #ffffff;
+  border: none ;
+  border-right: #ffffff 2px solid !important;
+  width: 100%;
+  background: transparent;
+}
+
+.sidebar-element:hover {
+  background: #1e1e1e;
+}
+
 
 @font-face { font-family: alata-regular; 
   src: url('../fonts/Alata/Alata-Regular.ttf');

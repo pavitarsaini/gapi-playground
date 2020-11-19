@@ -1,43 +1,74 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import '../assets/stylesheets/App.css';
-import firebase, { auth, provider } from '../user/auth';
-const {getData} = require("./api");
+import '../assets/stylesheets/Courses.css';
+import {getToken, getCourses, getActive} from './api'
+import Announcements from './Announcements'
+import firebase, {auth, provider} from '../user/auth';
+//import courses from '../data.json';
 
-var app = window.require('electron').remote;
+require('dotenv').config()
+//var app = window.require('electron');
+const {ipcRenderer} = window.require('electron')
 const fs = window.require('fs');
 
-var courses={};
-firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-      var userId = user.uid
-      firebase.database().ref('/users/' + userId).on('value', function(snapshot) {
-      var token = snapshot.val().access_token;
-      console.log(token)
-      test(token)
-      });
-      
+class Courses extends Component {
 
-  } 
-});
+    constructor(props) {
+        super(props);
+        this.state = {
+            courses: [],
+            photoURL: '',
+            CoursePage: false,
+            courseId: '',
+        }
+    }
 
-function test(token) {
-  getData(token, (res) => {
-    courses = res.data.courses;    
-    console.log(courses)
-    fs.writeFileSync('./data.json', JSON.stringify(courses) , 'utf-8'); 
-},(err) => {console.log(err);});}
+    async componentDidMount() {
+        var config = JSON.parse(ipcRenderer.sendSync('getUid-message', ''))
+        var uid = await config.uid;
+        console.log(uid);
+        var token = await getToken(uid)
+        console.log(token);
+        var courses = await getCourses(token)
+        console.log(courses)
+        var active = await getActive(courses.courses)
+        console.log(active)
+        this.setState({courses: active})
+    }
 
-//console.log(courses)
-class Courses extends Component {    
+    renderItems = () => {
+        const data = this.state.courses;
+        const mapRows = data.map((item, index) => (
+            <div key={item.id} className={"course"}>
+                {/* Passing unique value to 'key' prop, eases process for virtual DOM to remove specific element and update HTML tree  */}
+                <div className={"course-header"}>
+                    <a href={"#"} onClick={() => {{this.setState({CoursePage: true, courseId: item.id,})}}}>
+                        <div className={"course-name"} >{item.name}</div>
+                        <div className={"course-section"}>{item.section}
+                            &bull; {item.room}</div>
+                    </a>
+                </div>
+            </div>
+        ));
+        return mapRows;
+    };
 
     render() {
-      return (
-          <div>HI
-            
-              <button ></button>
-          </div>
-      );
+      if(this.state.CoursePage){
+        return (
+              <Announcements courseId={this.state.courseId}/>
+        );
+      }
+        else {
+          return (
+            <div className={"courses"}>
+                <div className={"courses-container"}>
+                {this.renderItems()}
+                </div>
+            </div>
+        );
+        }
     }
-  }
+}
 
-  export default Courses;
+export default Courses;
